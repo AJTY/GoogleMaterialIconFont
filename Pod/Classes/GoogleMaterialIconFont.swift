@@ -32,7 +32,11 @@ public extension UIFont {
         if UIFont.fontNames(forFamilyName: fontname).count == 0 {
             fontLoaderHandler(filename)
         }
-        return UIFont(name: fontname, size: size)!
+        
+        guard let font = UIFont(name: fontname, size: size) else {
+            fatalError("\(fontname) not found")
+        }
+        return font
     }
 }
 
@@ -41,7 +45,6 @@ private class FontLoader {
         let bundle = Bundle(for: FontLoader.self)
         let identifier = bundle.bundleIdentifier
         let fileExtension = "ttf"
-        
         let fontURL: URL
         switch identifier?.hasPrefix("org.cocoapods") {
         case (let cocoapods?) where cocoapods:
